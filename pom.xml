@@ -8,10 +8,10 @@
     <relativePath />
   </parent>
 
-  <groupId>com.googlecode.refit</groupId>
-  <artifactId>refit-jenkins</artifactId>
+  <groupId>com.googlecode.refit.jenkins</groupId>
+  <artifactId>refit</artifactId>
   <name>reFit Jenkins Plugin</name>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
