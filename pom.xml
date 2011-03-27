@@ -16,6 +16,14 @@
 
   <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
 
+  <developers>
+    <developer>
+      <id>hwellmann</id>
+      <name>Harald Wellmann</name>
+      <email>harald.wellmann@gmx.de</email>
+    </developer>
+  </developers>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <refit.version>1.7.0.SNAPSHOT</refit.version>
