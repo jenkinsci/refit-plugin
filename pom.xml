@@ -5,13 +5,13 @@
     <artifactId>plugin</artifactId>
     <!-- which version of Jenkins is this plugin built against? -->    
     <version>1.403</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>com.googlecode.refit</groupId>
   <artifactId>refit-jenkins</artifactId>
   <name>reFit Jenkins Plugin</name>
-  <version>1.7.0.SNAPSHOT</version>
+  <version>0.1</version>
   <packaging>hpi</packaging>
 
   <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
@@ -71,4 +71,10 @@
     </plugins>
   </build>
 
+
+  <scm>
+    <connection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.1</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.1</developerConnection>
+    <url>https://svn.jenkins-ci.org/tags/refit-0.1</url>
+  </scm>
 </project>
