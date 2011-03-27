@@ -14,6 +14,8 @@
   <version>1.7.0.SNAPSHOT</version>
   <packaging>hpi</packaging>
 
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <refit.version>1.7.0.SNAPSHOT</refit.version>
