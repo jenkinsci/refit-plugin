@@ -11,7 +11,7 @@
   <groupId>com.googlecode.refit.jenkins</groupId>
   <artifactId>refit</artifactId>
   <name>reFit Jenkins Plugin</name>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>hpi</packaging>
 
   <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
@@ -68,4 +68,10 @@
       </plugin>      
     </plugins>
   </build>
+
+  <scm>
+    <connection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.2</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.2</developerConnection>
+    <url>https://svn.jenkins-ci.org/tags/refit-0.2</url>
+  </scm>
 </project>
