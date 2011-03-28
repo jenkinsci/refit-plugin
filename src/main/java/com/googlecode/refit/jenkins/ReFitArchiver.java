@@ -130,6 +130,6 @@ public class ReFitArchiver extends Recorder {
      * Gets the directory where the files will be archived.
      */
     static File getTargetDir(AbstractItem project) {
-        return new File(project.getRootDir(), "fit");
+        return new File(project.getRootDir(), "refit");
     }
 }
