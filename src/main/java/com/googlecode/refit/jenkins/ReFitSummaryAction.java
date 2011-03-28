@@ -24,9 +24,11 @@
 package com.googlecode.refit.jenkins;
 
 import hudson.FilePath;
+import hudson.PluginWrapper;
+import hudson.model.ProminentProjectAction;
 import hudson.model.AbstractItem;
 import hudson.model.DirectoryBrowserSupport;
-import hudson.model.ProminentProjectAction;
+import hudson.model.Hudson;
 
 import java.io.IOException;
 
@@ -46,7 +48,7 @@ import org.kohsuke.stapler.StaplerResponse;
 public final class ReFitSummaryAction implements ProminentProjectAction {
 
     private static final long serialVersionUID = 4399590075673857468L;
-    private static final String ICON_URL = "/plugin/refit-jenkins/img/reFitLogo.png";
+    private static final String REFIT_ICON_URL = "img/reFitLogo.png";
     private final AbstractItem project;
 
     public ReFitSummaryAction(AbstractItem project) {
@@ -75,12 +77,22 @@ public final class ReFitSummaryAction implements ProminentProjectAction {
      */
     public String getIconFileName() {
         if (ReFitArchiver.getTargetDir(project).exists()) {
-            return ICON_URL;
+            return getPluginResourcePath() + REFIT_ICON_URL;
         }
         else {
             return null;
         }
     }
+    
+    /**
+     * Returns the path or URL to access web resources from this plugin.
+     * @return resource path
+     */
+    public String getPluginResourcePath() {
+        PluginWrapper wrapper = Hudson.getInstance().getPluginManager().getPlugin(ReFitPlugin.class);
+        return "/plugin/" + wrapper.getShortName() +"/";
+    }
+   
 
     /**
      * Creates a directory browser for the given icon. This browser maps Jenkins URLs to relative
@@ -97,6 +109,6 @@ public final class ReFitSummaryAction implements ProminentProjectAction {
 
         String title = project.getDisplayName();
         FilePath systemDirectory = new FilePath(ReFitArchiver.getTargetDir(project));
-        return new DirectoryBrowserSupport(this, systemDirectory, title, ICON_URL, false);
+        return new DirectoryBrowserSupport(this, systemDirectory, title, REFIT_ICON_URL, false);
     }
 }
