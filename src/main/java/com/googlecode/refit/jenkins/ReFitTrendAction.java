@@ -3,6 +3,7 @@ package com.googlecode.refit.jenkins;
 import hudson.model.Action;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.util.ChartUtil;
 import hudson.util.DataSetBuilder;
 
 import java.io.IOException;
@@ -36,25 +37,31 @@ public class ReFitTrendAction implements Action {
     }
 
     public boolean buildDataExists() {
-        return true;
+        return project.getLastSuccessfulBuild() != null;
     }
     
     public void doGraph( StaplerRequest req, StaplerResponse rsp ) throws IOException {
-//        if( ChartUtil.awtProblemCause != null ){
-//            rsp.sendRedirect2( req.getContextPath() + DEFAULT_IMAGE );
-//            return;
-//        }
+        if (ChartUtil.awtProblemCause != null) {
+            // not available. send out error message
+            rsp.sendRedirect2(req.getContextPath() + "/images/headless.png");
+            return;
+        }
 
-        getGraph().doPng( req, rsp );
+        getGraph().doPng(req, rsp);
     }
     
     public void doMap( StaplerRequest req, StaplerResponse rsp ) throws IOException {
-        getGraph().doMap( req, rsp );
+        if (ChartUtil.awtProblemCause != null) {
+            // not available. send out error message
+            rsp.sendRedirect2(req.getContextPath() + "/images/headless.png");
+            return;
+        }
+        getGraph().doMap(req, rsp);
     }
     
     
     
-   public ReFitGraph getGraph() {
+   private ReFitGraph getGraph() {
        DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
        
        for (AbstractBuild<?, ?> build = project.getLastSuccessfulBuild(); 
@@ -76,6 +83,5 @@ public class ReFitTrendAction implements Action {
        
        
        return new ReFitGraph(data.build());
-   }
-    
+   }    
 }
