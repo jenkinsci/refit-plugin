@@ -65,6 +65,7 @@ import com.googlecode.refit.jenkins.jaxb.Summary;
 public class ReFitArchiver extends Recorder {
 
     private String reportPath;
+    
 
     @DataBoundConstructor
     public ReFitArchiver(String reportPath) {
@@ -74,7 +75,8 @@ public class ReFitArchiver extends Recorder {
     public String getReportPath() {
         return reportPath;
     }
-
+    
+    
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
     }
@@ -88,7 +90,7 @@ public class ReFitArchiver extends Recorder {
             logger.println("[reFit] not collecting results due to build failure");
             return true;
         }
-        AbstractProject project = build.getProject();
+
         FilePath report = build.getWorkspace().child(reportPath);
         if (! report.exists()) {
             logger.println("[reFit] report directory " + report + " does not exist");
@@ -97,13 +99,15 @@ public class ReFitArchiver extends Recorder {
         }
         Summary summary = getSummary(report);
         int numTests = summary.getNumTests();
+        ReFitBuildAction action = new ReFitBuildAction(summary);
+        build.getActions().add(action);
+        
         logger.println("[reFit] found " + numTests + " Fit tests");
         if (! summary.isPassed()) {
             build.setResult(Result.UNSTABLE);
         }
         
-        File targetDir = getTargetDir(project);
-        FilePath archive = new FilePath(targetDir);
+        FilePath archive = ReFitPlugin.locateBuildReportFolder(build);
         archive.deleteContents();
         report.copyRecursiveTo(archive);
 
@@ -128,10 +132,4 @@ public class ReFitArchiver extends Recorder {
         return Arrays.asList(fitAction, trendAction);
     }
 
-    /**
-     * Gets the directory where the files will be archived.
-     */
-    static File getTargetDir(AbstractItem project) {
-        return new File(project.getRootDir(), "refit");
-    }
 }

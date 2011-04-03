@@ -26,7 +26,8 @@ package com.googlecode.refit.jenkins;
 import hudson.FilePath;
 import hudson.PluginWrapper;
 import hudson.model.ProminentProjectAction;
-import hudson.model.AbstractItem;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.model.Hudson;
 
@@ -45,13 +46,13 @@ import org.kohsuke.stapler.StaplerResponse;
  * @author Harald Wellmann
  *
  */
-public final class ReFitSummaryAction implements ProminentProjectAction {
+public class ReFitSummaryAction implements ProminentProjectAction {
 
     private static final long serialVersionUID = 4399590075673857468L;
     private static final String REFIT_ICON_URL = "img/reFitLogo.png";
-    private final AbstractItem project;
+    private final AbstractProject<?, ?> project;
 
-    public ReFitSummaryAction(AbstractItem project) {
+    public ReFitSummaryAction(AbstractProject<?, ?> project) {
         this.project = project;
     }
 
@@ -76,12 +77,20 @@ public final class ReFitSummaryAction implements ProminentProjectAction {
      * will be displayed only if the report directory exists.
      */
     public String getIconFileName() {
-        if (ReFitArchiver.getTargetDir(project).exists()) {
-            return getPluginResourcePath() + REFIT_ICON_URL;
+        try {
+            if (getTargetDir(project).exists()) {
+                return getPluginResourcePath() + REFIT_ICON_URL;
+            }
         }
-        else {
-            return null;
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
     
     /**
@@ -108,7 +117,15 @@ public final class ReFitSummaryAction implements ProminentProjectAction {
             throws IOException, ServletException, InterruptedException {
 
         String title = project.getDisplayName();
-        FilePath systemDirectory = new FilePath(ReFitArchiver.getTargetDir(project));
+        FilePath systemDirectory = getTargetDir(project);
+        System.out.println(systemDirectory);
         return new DirectoryBrowserSupport(this, systemDirectory, title, REFIT_ICON_URL, false);
+    }
+    
+    public FilePath getTargetDir(AbstractProject<?, ?> project) {
+        AbstractBuild<?, ?> lastSuccessfulBuild = project.getLastSuccessfulBuild();
+        FilePath reportFolder = ReFitPlugin.locateBuildReportFolder(lastSuccessfulBuild);
+        return reportFolder;
+        
     }
 }
