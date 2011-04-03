@@ -21,17 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
 
-  <j:if test="${from.buildDataExists()}">
-    <p/>
-    <div class="test-trend-caption">Fit Test Result Trend</div>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+  <l:layout title="Fit Test Result Trend">
+    <st:include page="sidepanel.jelly" it="${it.project}" />
+    <l:main-panel>
       <div>
-        <img src="refitTrend/graph" lazymap="refitTrend/map"/>
-        <br/>
-        <div style="text-align:right">
-          <a href="refitTrend/?width=800&amp;height=600">enlarge</a>
-        </div>  
-     </div>
-  </j:if>
+        <img src="graph?${request.queryString}" lazymap="map?rel=../&amp;${request.queryString}" alt="[Fit Test Result Trend Chart]"/>
+      </div>
+    </l:main-panel>
+  </l:layout>
 </j:jelly>

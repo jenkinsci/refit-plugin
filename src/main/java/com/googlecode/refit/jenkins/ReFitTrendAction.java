@@ -43,6 +43,14 @@ public class ReFitTrendAction implements Action {
     public ReFitTrendAction(AbstractProject<?, ?> project) {
         this.project = project;
     }
+    
+    
+
+    public AbstractProject<?, ?> getProject() {
+        return project;
+    }
+
+
 
     @Override
     public String getIconFileName() {
