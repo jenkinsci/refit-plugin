@@ -29,12 +29,17 @@ import hudson.tasks.test.TestResult;
 
 import java.awt.Color;
 
+/**
+ * Derived from <code>hudson.tasks.junit.History.ChartLabel</code>, which is not public.
+ * @author Harald Wellmann
+ *
+ */
 public class ChartLabel implements Comparable<ChartLabel> {
-    TestResult o;
+    private TestResult result;
     private String url;
 
     public ChartLabel(TestResult o) {
-        this.o = o;
+        this.result = o;
         this.url = null;
     }
 
@@ -45,14 +50,14 @@ public class ChartLabel implements Comparable<ChartLabel> {
     }
 
     private void generateUrl() {
-        AbstractBuild<?, ?> build = o.getOwner();
+        AbstractBuild<?, ?> build = result.getOwner();
         String buildLink = build.getUrl();
-        String actionUrl = o.getTestResultAction().getUrlName();
-        this.url = Hudson.getInstance().getRootUrl() + buildLink + actionUrl + o.getUrl();
+        String actionUrl = result.getTestResultAction().getUrlName();
+        this.url = Hudson.getInstance().getRootUrl() + buildLink + actionUrl + result.getUrl();
     }
 
     public int compareTo(ChartLabel that) {
-        return this.o.getOwner().number - that.o.getOwner().number;
+        return this.result.getOwner().number - that.result.getOwner().number;
     }
 
     @Override
@@ -61,26 +66,28 @@ public class ChartLabel implements Comparable<ChartLabel> {
             return false;
         }
         ChartLabel that = (ChartLabel) o;
-        return this.o == that.o;
+        return this.result == that.result;
     }
 
     public Color getColor() {
         return null;
     }
+    
+    public TestResult getResult() {
+        return result;
+    }
 
     @Override
     public int hashCode() {
-        return o.hashCode();
+        return result.hashCode();
     }
 
     @Override
     public String toString() {
-        String l = o.getOwner().getDisplayName();
-        String s = o.getOwner().getBuiltOnStr();
+        String l = result.getOwner().getDisplayName();
+        String s = result.getOwner().getBuiltOnStr();
         if (s != null)
             l += ' ' + s;
         return l;
-        // return o.getDisplayName() + " " + o.getOwner().getDisplayName();
     }
-
 }

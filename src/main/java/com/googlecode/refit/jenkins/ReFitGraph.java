@@ -23,6 +23,7 @@
  */
 package com.googlecode.refit.jenkins;
 
+import hudson.tasks.test.TestResult;
 import hudson.util.ChartUtil;
 import hudson.util.ColorPalette;
 import hudson.util.Graph;
@@ -112,7 +113,8 @@ public class ReFitGraph extends Graph {
             @Override
             public String generateToolTip(CategoryDataset dataset, int row, int column) {
                 ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
-                return label.o.getOwner().getDisplayName() + " : " + label.o.getDurationString();
+                TestResult result = label.getResult();
+                return result.getOwner().getDisplayName() + " : " + result.getDurationString();
             }
         };
         plot.setRenderer(ar);

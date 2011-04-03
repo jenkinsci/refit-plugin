@@ -118,11 +118,10 @@ public class ReFitSummaryAction implements ProminentProjectAction {
 
         String title = project.getDisplayName();
         FilePath systemDirectory = getTargetDir(project);
-        System.out.println(systemDirectory);
         return new DirectoryBrowserSupport(this, systemDirectory, title, REFIT_ICON_URL, false);
     }
     
-    public FilePath getTargetDir(AbstractProject<?, ?> project) {
+    private FilePath getTargetDir(AbstractProject<?, ?> project) {
         AbstractBuild<?, ?> lastSuccessfulBuild = project.getLastSuccessfulBuild();
         FilePath reportFolder = ReFitPlugin.locateBuildReportFolder(lastSuccessfulBuild);
         return reportFolder;

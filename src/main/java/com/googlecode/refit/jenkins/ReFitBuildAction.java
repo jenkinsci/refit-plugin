@@ -68,7 +68,7 @@ public class ReFitBuildAction implements Action {
 
     @Override
     public String getUrlName() {
-        return "refit";
+        return "refitBuild";
     }
 
 
