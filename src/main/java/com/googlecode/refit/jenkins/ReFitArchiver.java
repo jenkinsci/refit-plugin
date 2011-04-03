@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -123,7 +124,8 @@ public class ReFitArchiver extends Recorder {
     @Override
     public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
         ReFitSummaryAction fitAction = new ReFitSummaryAction(project);
-        return Collections.singleton(fitAction);
+        ReFitTrendAction trendAction = new ReFitTrendAction();
+        return Arrays.asList(fitAction, trendAction);
     }
 
     /**
