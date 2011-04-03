@@ -107,7 +107,7 @@ public class ReFitArchiver extends Recorder {
             build.setResult(Result.UNSTABLE);
         }
         
-        FilePath archive = ReFitPlugin.locateBuildReportFolder(build);
+        FilePath archive = ReFitPlugin.getBuildReportFolder(build);
         archive.deleteContents();
         report.copyRecursiveTo(archive);
 

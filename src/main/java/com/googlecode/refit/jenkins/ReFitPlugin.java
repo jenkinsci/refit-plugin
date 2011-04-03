@@ -28,7 +28,9 @@ import hudson.Plugin;
 import hudson.model.AbstractBuild;
 
 /**
- * Placeholder for plugin entry point. We do not need any explicit initialization for now.
+ * Placeholder for plugin entry point. Explicit initialization is not required for now.
+ * <p>
+ * This class also acts as a container for methods used throughout the plugin.
  * 
  * @author Harald Wellmann
  *
@@ -37,9 +39,14 @@ public class ReFitPlugin extends Plugin {
     
     public static final String REPORT_FOLDER = "refitReports";
 
-    public static FilePath locateBuildReportFolder(AbstractBuild<?,?> build){
+    /**
+     * Returns the Fit report folder for a given build.
+     * @param build  current build
+     * @return Fit report folder
+     */
+    public static FilePath getBuildReportFolder(AbstractBuild<?,?> build) {
         assert build != null;
-        FilePath buildRoot = new FilePath( build.getRootDir());
+        FilePath buildRoot = new FilePath(build.getRootDir());
         FilePath reportFolder = new FilePath(buildRoot, REPORT_FOLDER);
         return reportFolder;
     }

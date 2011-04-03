@@ -123,7 +123,7 @@ public class ReFitSummaryAction implements ProminentProjectAction {
     
     private FilePath getTargetDir(AbstractProject<?, ?> project) {
         AbstractBuild<?, ?> lastSuccessfulBuild = project.getLastSuccessfulBuild();
-        FilePath reportFolder = ReFitPlugin.locateBuildReportFolder(lastSuccessfulBuild);
+        FilePath reportFolder = ReFitPlugin.getBuildReportFolder(lastSuccessfulBuild);
         return reportFolder;
         
     }
