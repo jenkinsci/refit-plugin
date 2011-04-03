@@ -2,41 +2,32 @@ package com.googlecode.refit.jenkins;
 
 import hudson.model.Action;
 
-import com.googlecode.refit.jenkins.jaxb.Summary;
-
 public class ReFitBuildAction implements Action {
     
-    private int numRight;
-    private int numWrong;
-    private int numExceptions;
-    private int numIgnored;
+    private ReFitTestResult result;
     
-    
-    public ReFitBuildAction(Summary summary) {
-        this.numRight = summary.getRight();
-        this.numWrong = summary.getWrong();
-        this.numExceptions = summary.getExceptions();
-        this.numIgnored = summary.getIgnored();
+    public ReFitBuildAction(ReFitTestResult result) {
+        this.result = result;
     }
 
 
     public int getNumRight() {
-        return numRight;
+        return result.getPassCount();
     }
 
 
     public int getNumWrong() {
-        return numWrong;
+        return result.getFailCount();
     }
 
 
     public int getNumExceptions() {
-        return numExceptions;
+        return 0;
     }
 
 
     public int getNumIgnored() {
-        return numIgnored;
+        return result.getSkipCount();
     }
 
 
@@ -56,7 +47,10 @@ public class ReFitBuildAction implements Action {
     public String getUrlName() {
         return "refit";
     }
-    
-    
 
+
+    public ReFitTestResult getTestResult() {
+        return result;
+    }
+    
 }

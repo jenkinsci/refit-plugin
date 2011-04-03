@@ -99,7 +99,8 @@ public class ReFitArchiver extends Recorder {
         }
         Summary summary = getSummary(report);
         int numTests = summary.getNumTests();
-        ReFitBuildAction action = new ReFitBuildAction(summary);
+        ReFitTestResult testResult = new ReFitTestResult(build, summary);
+        ReFitBuildAction action = new ReFitBuildAction(testResult);
         build.getActions().add(action);
         
         logger.println("[reFit] found " + numTests + " Fit tests");
@@ -128,7 +129,7 @@ public class ReFitArchiver extends Recorder {
     @Override
     public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
         ReFitSummaryAction fitAction = new ReFitSummaryAction(project);
-        ReFitTrendAction trendAction = new ReFitTrendAction();
+        ReFitTrendAction trendAction = new ReFitTrendAction(project);
         return Arrays.asList(fitAction, trendAction);
     }
 

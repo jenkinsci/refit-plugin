@@ -1,14 +1,24 @@
 package com.googlecode.refit.jenkins;
 
+import hudson.model.Action;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.util.DataSetBuilder;
+
 import java.io.IOException;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import hudson.model.Action;
-import hudson.util.ChartUtil;
-
 public class ReFitTrendAction implements Action {
+    
+    private AbstractProject<?, ?> project;
+
+
+
+    public ReFitTrendAction(AbstractProject<?, ?> project) {
+        this.project = project;
+    }
 
     @Override
     public String getIconFileName() {
@@ -45,7 +55,27 @@ public class ReFitTrendAction implements Action {
     
     
    public ReFitGraph getGraph() {
-       return new ReFitGraph();
+       DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
+       
+       for (AbstractBuild<?, ?> build = project.getLastSuccessfulBuild(); 
+           build != null; 
+           build = build.getPreviousBuild() ) {
+           
+           ReFitBuildAction action = build.getAction(ReFitBuildAction.class);
+           if (action == null) 
+               continue;
+           
+           ReFitTestResult result = action.getTestResult();
+           if (result == null)
+               continue;
+           
+           data.add(action.getNumRight(), "2Passed", new ChartLabel(result));
+           data.add(action.getNumWrong(), "1Failed", new ChartLabel(result));
+           data.add(action.getNumIgnored(), "0Skipped", new ChartLabel(result));
+       }
+       
+       
+       return new ReFitGraph(data.build());
    }
     
 }
