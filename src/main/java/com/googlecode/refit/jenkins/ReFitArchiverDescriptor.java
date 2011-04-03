@@ -38,7 +38,7 @@ import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 
 /**
- * Descriptor for the the {@link ReFitArchiver}.
+ * Descriptor for the {@link ReFitArchiver}.
  * <p>
  * This class interacts with config.jelly and the configuration page.
  * 

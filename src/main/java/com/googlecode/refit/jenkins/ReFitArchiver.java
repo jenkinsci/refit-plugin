@@ -81,7 +81,6 @@ public class ReFitArchiver extends Recorder {
         return BuildStepMonitor.NONE;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
             throws InterruptedException, IOException {
