@@ -31,6 +31,7 @@ import hudson.model.AbstractProject;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.model.Hudson;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -77,20 +78,12 @@ public class ReFitSummaryAction implements ProminentProjectAction {
      * will be displayed only if the report directory exists.
      */
     public String getIconFileName() {
-        try {
-            if (getTargetDir(project).exists()) {
-                return getPluginResourcePath() + REFIT_ICON_URL;
-            }
+        if (getTargetDir(project).exists()) {
+            return getPluginResourcePath() + REFIT_ICON_URL;
         }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        else {
+            return null;
         }
-        catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
     }
     
     /**
@@ -116,15 +109,14 @@ public class ReFitSummaryAction implements ProminentProjectAction {
     public DirectoryBrowserSupport doDynamic(StaplerRequest req, StaplerResponse rsp)
             throws IOException, ServletException, InterruptedException {
 
-        String title = project.getDisplayName();
-        FilePath systemDirectory = getTargetDir(project);
+        String title = project.getDisplayName() + " Fit Result Summary";
+        FilePath systemDirectory = new FilePath(getTargetDir(project));
         return new DirectoryBrowserSupport(this, systemDirectory, title, REFIT_ICON_URL, false);
     }
     
-    private FilePath getTargetDir(AbstractProject<?, ?> project) {
+    private File getTargetDir(AbstractProject<?, ?> project) {
         AbstractBuild<?, ?> lastSuccessfulBuild = project.getLastSuccessfulBuild();
-        FilePath reportFolder = ReFitPlugin.getBuildReportFolder(lastSuccessfulBuild);
-        return reportFolder;
-        
+        File reportFolder = ReFitPlugin.getBuildReportFolder(lastSuccessfulBuild);
+        return reportFolder;        
     }
 }

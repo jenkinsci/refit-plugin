@@ -23,9 +23,10 @@
  */
 package com.googlecode.refit.jenkins;
 
-import hudson.FilePath;
 import hudson.Plugin;
 import hudson.model.AbstractBuild;
+
+import java.io.File;
 
 /**
  * Placeholder for plugin entry point. Explicit initialization is not required for now.
@@ -44,10 +45,9 @@ public class ReFitPlugin extends Plugin {
      * @param build  current build
      * @return Fit report folder
      */
-    public static FilePath getBuildReportFolder(AbstractBuild<?,?> build) {
+    public static File getBuildReportFolder(AbstractBuild<?,?> build) {
         assert build != null;
-        FilePath buildRoot = new FilePath(build.getRootDir());
-        FilePath reportFolder = new FilePath(buildRoot, REPORT_FOLDER);
+        File reportFolder = new File(build.getRootDir(), REPORT_FOLDER);
         return reportFolder;
     }
 }

@@ -29,18 +29,15 @@ import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractItem;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Recorder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import javax.xml.bind.JAXBException;
 
@@ -81,41 +78,64 @@ public class ReFitArchiver extends Recorder {
         return BuildStepMonitor.NONE;
     }
 
+    /**
+     * Copies the Fit reports of a given build to an archive child folder. The reports of the
+     * last successful build are made available via a project action.
+     * <p>
+     * The build result may change from stable to unstable when there are Fit test failures
+     * or exceptions.  
+     */
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
             throws InterruptedException, IOException {
         PrintStream logger = listener.getLogger();
+        
+        // Early exit when the build has failed. There's little chance of finding any reports
+        // in this case anyway.
         if (build.getResult().isWorseOrEqualTo(Result.FAILURE)) {
             logger.println("[reFit] not collecting results due to build failure");
             return true;
         }
 
+        // Fail the build if the report directory does not exist. This is most probably caused
+        // by incorrect input on the configuration page.
         FilePath report = build.getWorkspace().child(reportPath);
         if (! report.exists()) {
             logger.println("[reFit] report directory " + report + " does not exist");
             build.setResult(Result.FAILURE);
             return true;
         }
+        
+        // Read the reFit summary
         Summary summary = getSummary(report);
         int numTests = summary.getNumTests();
         ReFitTestResult testResult = new ReFitTestResult(build, summary);
+        
+        // Create an Action with containing the test results counts to be persisted for this
+        // build. This will be used for generating a trend graph.
         ReFitBuildAction action = new ReFitBuildAction(testResult);
         build.getActions().add(action);
-        
+                
         logger.println("[reFit] found " + numTests + " Fit tests");
         if (! summary.isPassed()) {
             build.setResult(Result.UNSTABLE);
         }
         
-        FilePath archive = ReFitPlugin.getBuildReportFolder(build);
-        archive.deleteContents();
+        // Archive the entire reFit output folder.
+        FilePath archive = new FilePath(ReFitPlugin.getBuildReportFolder(build));
         report.copyRecursiveTo(archive);
 
         return true;
     }
 
-    public Summary getSummary(FilePath report) throws IOException {
-        InputStream is = report.child(ReportReader.FIT_REPORT_XML).read();
+    /**
+     * Unmarshals the reFit summary from the report directory.
+     * @param reportDir  directory containing reFit reports
+     * @return JAXB object representing the test summary
+     * @throws IOException
+     */
+    public Summary getSummary(FilePath reportDir) throws IOException {
+        InputStream is = reportDir.child(ReportReader.FIT_REPORT_XML).read();
         try {
             Summary summary = new ReportReader().readXml(is);
             return summary;
@@ -125,11 +145,17 @@ public class ReFitArchiver extends Recorder {
         }
     }
 
+    /**
+     * Returns the project-level actions of this plugin. This is required to make the actions
+     * available to the user via relative URLs.
+     * <p>
+     * There is an action for displaying the latest test summary, and another one for generating
+     * a trend graph.
+     */
     @Override
     public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
         ReFitSummaryAction fitAction = new ReFitSummaryAction(project);
         ReFitTrendAction trendAction = new ReFitTrendAction(project);
         return Arrays.asList(fitAction, trendAction);
     }
-
 }
