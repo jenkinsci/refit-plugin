@@ -23,7 +23,6 @@
  */
 package com.googlecode.refit.jenkins;
 
-import static com.googlecode.refit.jenkins.ReFitPlugin.getTargetDir;
 import hudson.model.ProminentProjectAction;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;

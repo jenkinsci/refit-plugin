@@ -23,7 +23,7 @@
  */
 package com.googlecode.refit.jenkins;
 
-import static com.googlecode.refit.jenkins.ReFitPlugin.getTargetDir;
+import static com.googlecode.refit.jenkins.ReFitPlugin.getBuildReportFolder;
 import hudson.FilePath;
 import hudson.model.Action;
 import hudson.model.AbstractBuild;
@@ -108,7 +108,7 @@ public class ReFitBuildAction implements Action {
         AbstractBuild<?, ?> build = result.getOwner();
         AbstractProject<?, ?> project = build.getProject();
         String title = project.getDisplayName() + " Fit Result Summary";
-        FilePath systemDirectory = new FilePath(getTargetDir(project, build));
+        FilePath systemDirectory = new FilePath(getBuildReportFolder(build));
         return new DirectoryBrowserSupport(this, systemDirectory, title, null, false);
     }
 }

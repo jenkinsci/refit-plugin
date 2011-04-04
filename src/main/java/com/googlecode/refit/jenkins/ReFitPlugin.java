@@ -55,13 +55,6 @@ public class ReFitPlugin extends Plugin {
         return reportFolder;
     }
     
-    public static File getTargetDir(AbstractProject<?, ?> project, AbstractBuild<?, ?> build) {
-        
-        AbstractBuild<?, ?> b = (build == null) ? project.getLastSuccessfulBuild() : build;
-        File reportFolder = getBuildReportFolder(b);
-        return reportFolder;        
-    }
-    
     /**
      * Returns the path or URL to access web resources from this plugin.
      * @return resource path
