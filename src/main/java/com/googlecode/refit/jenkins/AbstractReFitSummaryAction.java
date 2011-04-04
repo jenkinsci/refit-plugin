@@ -25,7 +25,7 @@ package com.googlecode.refit.jenkins;
 
 import hudson.FilePath;
 import hudson.PluginWrapper;
-import hudson.model.ProminentProjectAction;
+import hudson.model.Action;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.DirectoryBrowserSupport;
@@ -47,14 +47,16 @@ import org.kohsuke.stapler.StaplerResponse;
  * @author Harald Wellmann
  *
  */
-public class ReFitSummaryAction implements ProminentProjectAction {
+abstract public class AbstractReFitSummaryAction implements Action {
 
     private static final long serialVersionUID = 4399590075673857468L;
     private static final String REFIT_ICON_URL = "img/reFitLogo.png";
     private final AbstractProject<?, ?> project;
+    private final AbstractBuild<?, ?> build;
 
-    public ReFitSummaryAction(AbstractProject<?, ?> project) {
+    public AbstractReFitSummaryAction(AbstractProject<?, ?> project, AbstractBuild<?, ?> build) {
         this.project = project;
+        this.build = build;
     }
 
     /**
@@ -78,7 +80,7 @@ public class ReFitSummaryAction implements ProminentProjectAction {
      * will be displayed only if the report directory exists.
      */
     public String getIconFileName() {
-        if (getTargetDir(project).exists()) {
+        if (getTargetDir(project, build).exists()) {
             return getPluginResourcePath() + REFIT_ICON_URL;
         }
         else {
@@ -110,13 +112,14 @@ public class ReFitSummaryAction implements ProminentProjectAction {
             throws IOException, ServletException, InterruptedException {
 
         String title = project.getDisplayName() + " Fit Result Summary";
-        FilePath systemDirectory = new FilePath(getTargetDir(project));
+        FilePath systemDirectory = new FilePath(getTargetDir(project, build));
         return new DirectoryBrowserSupport(this, systemDirectory, title, REFIT_ICON_URL, false);
     }
     
-    private File getTargetDir(AbstractProject<?, ?> project) {
-        AbstractBuild<?, ?> lastSuccessfulBuild = project.getLastSuccessfulBuild();
-        File reportFolder = ReFitPlugin.getBuildReportFolder(lastSuccessfulBuild);
+    private File getTargetDir(AbstractProject<?, ?> project, AbstractBuild<?, ?> build) {
+        
+        AbstractBuild<?, ?> b = (build == null) ? project.getLastSuccessfulBuild() : build;
+        File reportFolder = ReFitPlugin.getBuildReportFolder(b);
         return reportFolder;        
     }
 }
