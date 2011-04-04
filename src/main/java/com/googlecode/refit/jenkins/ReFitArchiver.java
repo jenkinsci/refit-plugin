@@ -114,9 +114,7 @@ public class ReFitArchiver extends Recorder {
         // Create an Action with containing the test results counts to be persisted for this
         // build. This will be used for generating a trend graph.
         ReFitBuildAction action = new ReFitBuildAction(testResult);
-        ReFitSummaryBuildAction summaryBuildAction = new ReFitSummaryBuildAction(build.getProject(), build);
         build.getActions().add(action);
-        build.getActions().add(summaryBuildAction);
                 
         logger.println("[reFit] found " + numTests + " Fit tests");
         if (! summary.isPassed()) {

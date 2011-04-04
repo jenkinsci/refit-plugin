@@ -23,8 +23,12 @@
  */
 package com.googlecode.refit.jenkins;
 
-import hudson.model.AbstractProject;
+import static com.googlecode.refit.jenkins.ReFitPlugin.getTargetDir;
 import hudson.model.ProminentProjectAction;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+
+import org.kohsuke.stapler.StaplerProxy;
 
 /**
  * An action letting the user browse the archived Fit reports, similar to the Javadoc action.
@@ -34,10 +38,44 @@ import hudson.model.ProminentProjectAction;
  * @author Harald Wellmann
  *
  */
-public class ReFitSummaryProjectAction extends AbstractReFitSummaryAction implements ProminentProjectAction {
+public class ReFitSummaryProjectAction implements ProminentProjectAction, StaplerProxy {
 
+
+    private AbstractProject<?, ?> project;
 
     public ReFitSummaryProjectAction(AbstractProject<?, ?> project) {
-        super(project, null);
+        this.project = project;
     }
+    
+    /**
+     * Returns the relative URL for browsing the Fit reports.
+     */
+    public String getUrlName() {
+        return "refit";
+    }
+
+    /**
+     * Returns the name of this action displayed on the job page.
+     * <p>
+     * TODO i18n
+     */
+    public String getDisplayName() {
+        return "Fit Test Report";
+    }
+
+    /**
+     * Returns the reFit icon URL. The icon is a plugin resource, not a global one. The icon
+     * will be displayed only if the report directory exists.
+     */
+    public String getIconFileName() {
+        return ReFitPlugin.getIconFileName();
+    }
+
+    @Override
+    public Object getTarget() {
+        AbstractBuild<?,?> build = project.getLastSuccessfulBuild();
+        return build.getAction(ReFitBuildAction.class);
+    }
+    
+    
 }

@@ -23,7 +23,19 @@
  */
 package com.googlecode.refit.jenkins;
 
+import static com.googlecode.refit.jenkins.ReFitPlugin.getTargetDir;
+import hudson.FilePath;
 import hudson.model.Action;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.DirectoryBrowserSupport;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 public class ReFitBuildAction implements Action {
     
@@ -54,26 +66,49 @@ public class ReFitBuildAction implements Action {
     }
 
 
-    @Override
+    /**
+     * Returns the reFit icon URL. The icon is a plugin resource, not a global one. The icon
+     * will be displayed only if the report directory exists.
+     */
     public String getIconFileName() {
-        return null;
+        return ReFitPlugin.getIconFileName();
     }
+    
 
 
     @Override
     public String getDisplayName() {        
-        return "Fit Results per Build";
+        return "Fit Test Report";
     }
 
 
     @Override
     public String getUrlName() {
-        return "refitBuild";
+        return "refitReport";
     }
 
 
     public ReFitTestResult getTestResult() {
         return result;
     }
-    
+ 
+    /**
+     * Creates a directory browser for the given icon. This browser maps Jenkins URLs to relative
+     * paths in the report archive via Stapler and renders the corresponding files.
+     * @param req
+     * @param rsp
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     * @throws InterruptedException
+     */
+    public DirectoryBrowserSupport doDynamic(StaplerRequest req, StaplerResponse rsp)
+            throws IOException, ServletException, InterruptedException {
+
+        AbstractBuild<?, ?> build = result.getOwner();
+        AbstractProject<?, ?> project = build.getProject();
+        String title = project.getDisplayName() + " Fit Result Summary";
+        FilePath systemDirectory = new FilePath(getTargetDir(project, build));
+        return new DirectoryBrowserSupport(this, systemDirectory, title, null, false);
+    }
 }

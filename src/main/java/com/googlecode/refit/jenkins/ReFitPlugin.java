@@ -24,7 +24,10 @@
 package com.googlecode.refit.jenkins;
 
 import hudson.Plugin;
+import hudson.PluginWrapper;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 
 import java.io.File;
 
@@ -39,6 +42,7 @@ import java.io.File;
 public class ReFitPlugin extends Plugin {
     
     public static final String REPORT_FOLDER = "refitReports";
+    private static final String REFIT_ICON_URL = "img/reFitLogo.png";
 
     /**
      * Returns the Fit report folder for a given build.
@@ -50,4 +54,25 @@ public class ReFitPlugin extends Plugin {
         File reportFolder = new File(build.getRootDir(), REPORT_FOLDER);
         return reportFolder;
     }
+    
+    public static File getTargetDir(AbstractProject<?, ?> project, AbstractBuild<?, ?> build) {
+        
+        AbstractBuild<?, ?> b = (build == null) ? project.getLastSuccessfulBuild() : build;
+        File reportFolder = getBuildReportFolder(b);
+        return reportFolder;        
+    }
+    
+    /**
+     * Returns the path or URL to access web resources from this plugin.
+     * @return resource path
+     */
+    public static String getPluginResourcePath() {
+        PluginWrapper wrapper = Hudson.getInstance().getPluginManager().getPlugin(ReFitPlugin.class);
+        return "/plugin/" + wrapper.getShortName() +"/";
+    }
+   
+    public static String getIconFileName() {
+        return getPluginResourcePath() + REFIT_ICON_URL;
+    }
+    
 }
