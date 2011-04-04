@@ -30,7 +30,9 @@ import hudson.tasks.test.TestResult;
 import java.awt.Color;
 
 /**
- * Derived from <code>hudson.tasks.junit.History.ChartLabel</code>, which is not public.
+ * Derived from <code>hudson.tasks.junit.History.ChartLabel</code>, which does not quite do
+ * what we need for refit and is not public anyway.
+ * 
  * @author Harald Wellmann
  *
  */
@@ -53,6 +55,7 @@ public class ChartLabel implements Comparable<ChartLabel> {
         AbstractBuild<?, ?> build = result.getOwner();
         String buildLink = build.getUrl();
         String actionUrl = result.getTestResultAction().getUrlName();
+        actionUrl = "refitBuild";
         this.url = Hudson.getInstance().getRootUrl() + buildLink + actionUrl + result.getUrl();
     }
 

@@ -114,7 +114,9 @@ public class ReFitGraph extends Graph {
             public String generateToolTip(CategoryDataset dataset, int row, int column) {
                 ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
                 TestResult result = label.getResult();
-                return result.getOwner().getDisplayName() + " : " + result.getDurationString();
+                String rowKey = (String) dataset.getRowKey(row);
+                return result.getOwner().getDisplayName() + " : " + 
+                    dataset.getValue(row, column) + " " + rowKey.substring(1);
             }
         };
         plot.setRenderer(ar);
