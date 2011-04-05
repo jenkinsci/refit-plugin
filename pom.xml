@@ -58,13 +58,6 @@
             <include>**/*.xjb</include>
           </bindingIncludes>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-xjc</artifactId>
-            <version>2.1.13</version>
-          </dependency>
-        </dependencies>
       </plugin>      
     </plugins>
   </build>
