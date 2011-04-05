@@ -30,8 +30,10 @@ import hudson.tasks.test.TestResult;
 import java.awt.Color;
 
 /**
+ * A label for a data point in the trend graph.
+ * <p>
  * Derived from <code>hudson.tasks.junit.History.ChartLabel</code>, which does not quite do
- * what we need for refit and is not public anyway.
+ * what we need for reFit and is not public anyway.
  * 
  * @author Harald Wellmann
  *

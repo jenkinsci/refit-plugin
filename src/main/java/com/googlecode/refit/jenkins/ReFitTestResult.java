@@ -29,6 +29,17 @@ import hudson.tasks.test.TestResult;
 
 import com.googlecode.refit.jenkins.jaxb.Summary;
 
+/**
+ * Fit test results (only the counts) for a given build. This is similar to {@link Summary}, but
+ * inherits from Hudson base classes.
+ * <p>
+ * TODO Not sure if we really need this. One point is that we strip all the individual test
+ * results from Summary, to avoid persisting the whole lot in build.xml. But do we really have
+ * to extend {@link TestResult}?
+ * 
+ * @author Harald Wellmann
+ *
+ */
 public class ReFitTestResult extends TestResult {
     
     private static final long serialVersionUID = 1L;

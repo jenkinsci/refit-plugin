@@ -26,7 +26,6 @@ package com.googlecode.refit.jenkins;
 import hudson.Plugin;
 import hudson.PluginWrapper;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Hudson;
 
 import java.io.File;
@@ -64,6 +63,10 @@ public class ReFitPlugin extends Plugin {
         return "/plugin/" + wrapper.getShortName() +"/";
     }
    
+    /**
+     * Return the file name for the reFit icon.
+     * @return name of plugin resource, relative to Jenkins context root
+     */
     public static String getIconFileName() {
         return getPluginResourcePath() + REFIT_ICON_URL;
     }

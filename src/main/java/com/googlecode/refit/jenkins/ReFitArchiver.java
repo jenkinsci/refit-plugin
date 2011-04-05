@@ -55,7 +55,8 @@ import com.googlecode.refit.jenkins.jaxb.Summary;
  * <p>
  * The report directory (relative to this project's workspace folder) must be defined on the
  * Jenkins project configuration page.
- * 
+ * <p>
+ * This class has a config.jelly with a validation method in {@link ReFitArchiverDescriptor}.
  * @author Harald Wellmann
  */
 @SuppressWarnings("unchecked")
@@ -64,18 +65,24 @@ public class ReFitArchiver extends Recorder {
     private String reportPath;
     
 
+    /**
+     * Constructs a ReFitArchiver with a parameter from the project configuration page.
+     * 
+     * @param reportPath root directory containing fit-report.xml and other reFit output.
+     *                   This parameter is bound by name to a field in config.jelly using the
+     *                   {@code DataBoundConstructor} annotation.
+     */
     @DataBoundConstructor
     public ReFitArchiver(String reportPath) {
         this.reportPath = reportPath;
     }
 
-    public String getReportPath() {
-        return reportPath;
-    }
-    
-    
+    /**
+     * For rendering the trend graph, we need the results of this build step from the
+     * previous build.
+     */
     public BuildStepMonitor getRequiredMonitorService() {
-        return BuildStepMonitor.NONE;
+        return BuildStepMonitor.STEP;
     }
 
     /**
@@ -83,7 +90,10 @@ public class ReFitArchiver extends Recorder {
      * last successful build are made available via a project action.
      * <p>
      * The build result may change from stable to unstable when there are Fit test failures
-     * or exceptions.  
+     * or exceptions.
+     * <p>
+     * If the build was successful, a {@link RefitBuildAction} is added to the build to 
+     * persist the Fit test results. This is used for building a trend graph.  
      */
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
@@ -111,7 +121,7 @@ public class ReFitArchiver extends Recorder {
         int numTests = summary.getNumTests();
         ReFitTestResult testResult = new ReFitTestResult(build, summary);
         
-        // Create an Action with containing the test results counts to be persisted for this
+        // Create an Action containing the test results counts to be persisted for this
         // build. This will be used for generating a trend graph.
         ReFitBuildAction action = new ReFitBuildAction(testResult);
         build.getActions().add(action);
@@ -134,7 +144,7 @@ public class ReFitArchiver extends Recorder {
      * @return JAXB object representing the test summary
      * @throws IOException
      */
-    public Summary getSummary(FilePath reportDir) throws IOException {
+    private Summary getSummary(FilePath reportDir) throws IOException {
         InputStream is = reportDir.child(ReportReader.FIT_REPORT_XML).read();
         try {
             Summary summary = new ReportReader().readXml(is);

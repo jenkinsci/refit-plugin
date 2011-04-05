@@ -37,6 +37,14 @@ import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
+/**
+ * Build level action to display the reFit result summary of the last build.
+ * <p>
+ * TODO Can we merge this class with ReFitTestResult?
+ * 
+ * @author Harald Wellmann
+ *
+ */
 public class ReFitBuildAction implements Action {
     
     private ReFitTestResult result;
@@ -75,13 +83,17 @@ public class ReFitBuildAction implements Action {
     }
     
 
-
+    /**
+     * Label for the icon displayed on the project page.
+     */
     @Override
     public String getDisplayName() {        
         return "Fit Test Report";
     }
 
-
+    /**
+     * Relative URL for the report resource.
+     */
     @Override
     public String getUrlName() {
         return "refitReport";

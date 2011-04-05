@@ -30,12 +30,12 @@ import hudson.model.AbstractProject;
 import org.kohsuke.stapler.StaplerProxy;
 
 /**
- * An action letting the user browse the archived Fit reports, similar to the Javadoc action.
- * The user activates this action by clicking on the reFit icon which is displayed on the 
- * job page and on the sidebar of the job page and all associated build pages.
+ * An action letting the user browse the archived Fit reports of the last successful build, similar
+ * to the Javadoc action. The user activates this action by clicking on the reFit icon which is
+ * displayed on the job page and on the sidebar of the job page and all associated build pages.
  * 
  * @author Harald Wellmann
- *
+ * 
  */
 public class ReFitSummaryProjectAction implements ProminentProjectAction, StaplerProxy {
 
@@ -70,11 +70,13 @@ public class ReFitSummaryProjectAction implements ProminentProjectAction, Staple
         return ReFitPlugin.getIconFileName();
     }
 
+    /**
+     * Delegates all Stapler requests to the {@link ReFitBuildAction} of the last successful
+     * build. This avoid duplicating the do... methods.
+     */
     @Override
     public Object getTarget() {
         AbstractBuild<?,?> build = project.getLastSuccessfulBuild();
         return build.getAction(ReFitBuildAction.class);
     }
-    
-    
 }

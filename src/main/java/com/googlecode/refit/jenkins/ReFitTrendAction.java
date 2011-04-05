@@ -34,23 +34,27 @@ import java.io.IOException;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
+/**
+ * A project action for displaying the reFit test result trend graph on the project page. This class
+ * has a {@code floatingBox.jelly} view which makes it appear on the project page, if data is
+ * available.
+ * <p>
+ * This object is exposed to the Jelly script in the {@code from} variable.
+ * 
+ * @author Harald Wellmann
+ * 
+ */
 public class ReFitTrendAction implements Action {
-    
+
     private AbstractProject<?, ?> project;
-
-
 
     public ReFitTrendAction(AbstractProject<?, ?> project) {
         this.project = project;
     }
-    
-    
 
     public AbstractProject<?, ?> getProject() {
         return project;
     }
-
-
 
     @Override
     public String getIconFileName() {
@@ -67,11 +71,24 @@ public class ReFitTrendAction implements Action {
         return "refitTrend";
     }
 
+    /**
+     * Called from floatingBox.jelly to decide if the graph should be rendered FIXME We should check
+     * that at least two builds exist.
+     * 
+     * @return true if data is available.
+     */
     public boolean buildDataExists() {
         return project.getLastSuccessfulBuild() != null;
     }
-    
-    public void doGraph( StaplerRequest req, StaplerResponse rsp ) throws IOException {
+
+    /**
+     * Renders the graph image.
+     * 
+     * @param req
+     * @param rsp
+     * @throws IOException
+     */
+    public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException {
         if (ChartUtil.awtProblemCause != null) {
             // not available. send out error message
             rsp.sendRedirect2(req.getContextPath() + "/images/headless.png");
@@ -80,8 +97,15 @@ public class ReFitTrendAction implements Action {
 
         getGraph().doPng(req, rsp);
     }
-    
-    public void doMap( StaplerRequest req, StaplerResponse rsp ) throws IOException {
+
+    /**
+     * Renders a clickable map for the graph image.
+     * 
+     * @param req
+     * @param rsp
+     * @throws IOException
+     */
+    public void doMap(StaplerRequest req, StaplerResponse rsp) throws IOException {
         if (ChartUtil.awtProblemCause != null) {
             // not available. send out error message
             rsp.sendRedirect2(req.getContextPath() + "/images/headless.png");
@@ -89,30 +113,31 @@ public class ReFitTrendAction implements Action {
         }
         getGraph().doMap(req, rsp);
     }
-    
-    
-    
-   private ReFitGraph getGraph() {
-       DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
-       
-       for (AbstractBuild<?, ?> build = project.getLastSuccessfulBuild(); 
-           build != null; 
-           build = build.getPreviousBuild() ) {
-           
-           ReFitBuildAction action = build.getAction(ReFitBuildAction.class);
-           if (action == null) 
-               continue;
-           
-           ReFitTestResult result = action.getTestResult();
-           if (result == null)
-               continue;
-           
-           data.add(action.getNumRight(), "2Passed", new ChartLabel(result));
-           data.add(action.getNumWrong(), "1Failed", new ChartLabel(result));
-           data.add(action.getNumIgnored(), "0Skipped", new ChartLabel(result));
-       }
-       
-       
-       return new ReFitGraph(data.build());
-   }    
+
+    /**
+     * Creates the trend graph.
+     * TODO Can we avoid doing this for every request, and even twice per request?
+     * @return trend graph
+     */
+    private ReFitGraph getGraph() {
+        DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
+
+        for (AbstractBuild<?, ?> build = project.getLastSuccessfulBuild(); build != null; build = build
+                .getPreviousBuild()) {
+
+            ReFitBuildAction action = build.getAction(ReFitBuildAction.class);
+            if (action == null)
+                continue;
+
+            ReFitTestResult result = action.getTestResult();
+            if (result == null)
+                continue;
+
+            data.add(action.getNumRight(), "2Passed", new ChartLabel(result));
+            data.add(action.getNumWrong(), "1Failed", new ChartLabel(result));
+            data.add(action.getNumIgnored(), "0Skipped", new ChartLabel(result));
+        }
+
+        return new ReFitGraph(data.build());
+    }
 }
