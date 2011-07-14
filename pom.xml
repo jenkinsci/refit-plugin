@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
@@ -12,7 +11,7 @@
   <groupId>com.googlecode.refit.jenkins</groupId>
   <artifactId>refit</artifactId>
   <name>reFit Jenkins Plugin</name>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.3.1</version>
   <packaging>hpi</packaging>
 
   <url>http://wiki.jenkins-ci.org/display/JENKINS/reFit+Plugin</url>
@@ -91,7 +90,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -108,7 +107,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -128,7 +127,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
 
@@ -146,7 +145,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
 
@@ -164,7 +163,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
 
@@ -176,4 +175,10 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <scm>
+    <connection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.3.1</connection>
+    <developerConnection>scm:svn:https://svn.jenkins-ci.org/tags/refit-0.3.1</developerConnection>
+    <url>https://svn.jenkins-ci.org/tags/refit-0.3.1</url>
+  </scm>
 </project>
