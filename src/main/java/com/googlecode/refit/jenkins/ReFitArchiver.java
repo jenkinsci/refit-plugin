@@ -76,6 +76,14 @@ public class ReFitArchiver extends Recorder {
     public ReFitArchiver(String reportPath) {
         this.reportPath = reportPath;
     }
+    
+    /**
+     * This getter is required by config.jelly.
+     * @return report path defined by user.
+     */
+    public String getReportPath() {
+        return reportPath;
+    }
 
     /**
      * For rendering the trend graph, we need the results of this build step from the
