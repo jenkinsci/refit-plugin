@@ -56,7 +56,7 @@ public class ChartLabel implements Comparable<ChartLabel> {
     private void generateUrl() {
         AbstractBuild<?, ?> build = result.getOwner();
         String buildLink = build.getUrl();
-        // String actionUrl = result.getTestResultAction().getUrlName();
+        // String actionUrl = result.getAction(AbstractTestResultAction.class).getUrlName();
         String actionUrl = "refitReport";
         this.url = Hudson.getInstance().getRootUrl() + buildLink + actionUrl + result.getUrl();
     }
